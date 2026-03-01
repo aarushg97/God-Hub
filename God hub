@@ -1,0 +1,69 @@
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local Humanoid = Character:WaitForChild("Humanoid")
+
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "GodHubUniversalScript"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.Parent = game.CoreGui
+
+local Frame = Instance.new("Frame")
+Frame.Size = UDim2.new(0, 200, 0, 100)
+Frame.Position = UDim2.new(0.5, -100, 0.5, -50)
+Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+Frame.BorderSizePixel = 0
+Frame.Parent = ScreenGui
+
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1, 0, 0, 30)
+Title.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+Title.BorderSizePixel = 0
+Title.Text = "God Hub Universal Script"
+Title.TextColor3 = Color3.new(1, 1, 1)
+Title.Font = Enum.Font.SourceSansBold
+Title.TextSize = 20
+Title.Parent = Frame
+
+local GodModeOn = false
+
+local Button = Instance.new("TextButton")
+Button.Size = UDim2.new(1, -20, 0, 50)
+Button.Position = UDim2.new(0, 10, 0, 40)
+Button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+Button.BorderSizePixel = 0
+Button.TextColor3 = Color3.new(1, 1, 1)
+Button.Font = Enum.Font.SourceSansBold
+Button.TextSize = 18
+Button.Text = "God Mode (OFF)"
+Button.Parent = Frame
+
+local function setGodMode(state)
+    GodModeOn = state
+    if GodModeOn then
+        Button.Text = "God Mode (ON)"
+        if Humanoid then
+            Humanoid.MaxHealth = math.huge
+            Humanoid.Health = math.huge
+            Humanoid.HealthChanged:Connect(function()
+                if Humanoid.Health < Humanoid.MaxHealth then
+                    Humanoid.Health = Humanoid.MaxHealth
+                end
+            end)
+        end
+    else
+        Button.Text = "God Mode (OFF)"
+        if Humanoid then
+            Humanoid.MaxHealth = 100
+            if Humanoid.Health > 100 then
+                Humanoid.Health = 100
+            end
+        end
+    end
+end
+
+Button.MouseButton1Click:Connect(function()
+    setGodMode(not GodModeOn)
+end)
+
+setGodMode(false)
